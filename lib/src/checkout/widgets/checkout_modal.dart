@@ -113,7 +113,6 @@ class _CheckOutModalWidgetState extends State<CheckOutModalWidget> {
   @override
   void initState() {
     _loadPage();
-    super.initState();
     // Setting up a periodic timer to check payment status every 3 seconds
     _timer = Timer.periodic(
       const Duration(seconds: 3),
@@ -148,6 +147,7 @@ class _CheckOutModalWidgetState extends State<CheckOutModalWidget> {
         },
       ),
     );
+    super.initState();
   }
 
   @override
@@ -202,44 +202,46 @@ class _CheckOutModalWidgetState extends State<CheckOutModalWidget> {
   Widget buildBody({
     required Set<Factory<OneSequenceGestureRecognizer>> gestureRecognizers,
   }) =>
-      SingleChildScrollView(
-        padding: EdgeInsets.only(
-          bottom: MediaQuery.of(context).viewInsets.bottom,
-        ),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Container(
-              decoration: BoxDecoration(
-                borderRadius: widget.borderRadius == null
-                    ? null
-                    : BorderRadius.only(
-                        topLeft: Radius.circular(widget.borderRadius!),
-                        topRight: Radius.circular(widget.borderRadius!),
-                      ),
-                color: widget.backgroundColor ??
-                    Theme.of(context).scaffoldBackgroundColor,
-              ),
-              child: Align(
-                alignment: Alignment.centerRight,
-                child: IconButton(
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                  icon: const Icon(Icons.close_rounded),
+      CustomScrollView(
+        slivers: [
+          SliverFillRemaining(
+            hasScrollBody: true,
+            fillOverscroll: true,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Container(
+                  decoration: BoxDecoration(
+                    borderRadius: widget.borderRadius == null
+                        ? null
+                        : BorderRadius.only(
+                            topLeft: Radius.circular(widget.borderRadius!),
+                            topRight: Radius.circular(widget.borderRadius!),
+                          ),
+                    color: widget.backgroundColor ??
+                        Theme.of(context).scaffoldBackgroundColor,
+                  ),
+                  child: Align(
+                    alignment: Alignment.centerRight,
+                    child: IconButton(
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                      icon: const Icon(Icons.close_rounded),
+                    ),
+                  ),
                 ),
-              ),
+                Flexible(
+                  child: buildWebView(
+                    backgroundColor: widget.backgroundColor ??
+                        Theme.of(context).scaffoldBackgroundColor,
+                    gestureRecognizers: gestureRecognizers,
+                  ),
+                )
+              ],
             ),
-            SizedBox(
-              height: MediaQuery.of(context).size.height,
-              child: buildWebView(
-                backgroundColor: widget.backgroundColor ??
-                    Theme.of(context).scaffoldBackgroundColor,
-                gestureRecognizers: gestureRecognizers,
-              ),
-            )
-          ],
-        ),
+          ),
+        ],
       );
 
   Widget buildWebView({

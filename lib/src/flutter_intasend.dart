@@ -37,6 +37,9 @@ class FlutterIntasend {
         isDismissible: true,
         enableDrag: false,
         isScrollControlled: true,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(borderRadius ?? 16.0),
+        ),
         constraints: BoxConstraints.expand(
             height: height ?? MediaQuery.of(context).size.height * 0.95),
         builder: (BuildContext context) {

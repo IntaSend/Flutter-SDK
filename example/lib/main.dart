@@ -36,9 +36,9 @@ class _HomePageState extends State<HomePage> {
       ),
       body: Center(
         child: FilledButton.tonal(
-          onPressed: () async{
+          onPressed: () async {
             // Initiating the Intasend checkout process when the button is pressed
-          await  FlutterIntasend.initCheckOut(
+            await FlutterIntasend.initCheckOut(
               context: context,
               isTest: true,
               publicKey: "ISPubKey_test_c319353e-ada9-41e6-a793-1a5ad8991e22",
@@ -46,6 +46,7 @@ class _HomePageState extends State<HomePage> {
               firstName: 'Test',
               lastName: 'User',
               email: 'jHbZt@example.com',
+              height: MediaQuery.of(context).size.height * 0.95,
               amount: 15,
               borderRadius: 16.0,
               // Callback function for processing status
@@ -74,6 +75,18 @@ class _HomePageState extends State<HomePage> {
           },
           child: const Text("Complete Payment"),
         ),
+      ),
+      bottomNavigationBar: BottomNavigationBar(
+        items: const [
+          BottomNavigationBarItem(
+            icon: Icon(Icons.home),
+            label: 'Home',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.settings),
+            label: 'Settings',
+          )
+        ],
       ),
     );
   }
