@@ -73,6 +73,9 @@ class _CheckOutModalWidgetState extends State<CheckOutModalWidget> {
         publicKey: widget.publicKey,
         currency: widget.currency,
         amount: widget.amount,
+        firstName: widget.firstName,
+        lastName: widget.lastName,
+        email: widget.email,
         context: context);
 
     String id = idSi['id'];
@@ -254,6 +257,7 @@ class _CheckOutModalWidgetState extends State<CheckOutModalWidget> {
               ),
             )
           : Container(
+              height: MediaQuery.of(context).size.height,
               color: widget.backgroundColor ??
                   Theme.of(context).scaffoldBackgroundColor,
               child: WebViewWidget(
