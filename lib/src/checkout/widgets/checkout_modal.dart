@@ -1,5 +1,6 @@
 // Importing necessary libraries
 import 'dart:async';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -190,6 +191,7 @@ class _CheckOutModalWidgetState extends State<CheckOutModalWidget> {
     // Building the widget structure
     return Scaffold(
       backgroundColor: Colors.transparent,
+      resizeToAvoidBottomInset: false,
       body: buildBody(gestureRecognizers: gestureRecognizers),
     );
   }
@@ -197,37 +199,44 @@ class _CheckOutModalWidgetState extends State<CheckOutModalWidget> {
   Widget buildBody({
     required Set<Factory<OneSequenceGestureRecognizer>> gestureRecognizers,
   }) =>
-      Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          const Spacer(),
-          Container(
-            decoration: BoxDecoration(
-              borderRadius: widget.borderRadius == null
-                  ? null
-                  : BorderRadius.only(
-                      topLeft: Radius.circular(widget.borderRadius!),
-                      topRight: Radius.circular(widget.borderRadius!),
-                    ),
-              color: widget.backgroundColor ??
-                  Theme.of(context).scaffoldBackgroundColor,
-            ),
-            child: Align(
-              alignment: Alignment.centerRight,
-              child: IconButton(
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-                icon: const Icon(Icons.close_rounded),
+      SingleChildScrollView(
+        padding: EdgeInsets.only(
+          bottom: MediaQuery.of(context).viewInsets.bottom,
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Container(
+              decoration: BoxDecoration(
+                borderRadius: widget.borderRadius == null
+                    ? null
+                    : BorderRadius.only(
+                        topLeft: Radius.circular(widget.borderRadius!),
+                        topRight: Radius.circular(widget.borderRadius!),
+                      ),
+                color: widget.backgroundColor ??
+                    Theme.of(context).scaffoldBackgroundColor,
+              ),
+              child: Align(
+                alignment: Alignment.centerRight,
+                child: IconButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  icon: const Icon(Icons.close_rounded),
+                ),
               ),
             ),
-          ),
-          buildWebView(
-            backgroundColor: widget.backgroundColor ??
-                Theme.of(context).scaffoldBackgroundColor,
-            gestureRecognizers: gestureRecognizers,
-          )
-        ],
+            SizedBox(
+              height: MediaQuery.of(context).size.height,
+              child: buildWebView(
+                backgroundColor: widget.backgroundColor ??
+                    Theme.of(context).scaffoldBackgroundColor,
+                gestureRecognizers: gestureRecognizers,
+              ),
+            )
+          ],
+        ),
       );
 
   Widget buildWebView({
@@ -235,25 +244,21 @@ class _CheckOutModalWidgetState extends State<CheckOutModalWidget> {
     required Set<Factory<OneSequenceGestureRecognizer>> gestureRecognizers,
   }) =>
       _webViewController == null
-          ? Flexible(
-              child: Container(
-                color: widget.backgroundColor ??
-                    Theme.of(context).scaffoldBackgroundColor,
-                child: Center(
-                  child: CircularProgressIndicator(
-                    color: widget.accentColor,
-                  ),
+          ? Container(
+              color: widget.backgroundColor ??
+                  Theme.of(context).scaffoldBackgroundColor,
+              child: Center(
+                child: CircularProgressIndicator(
+                  color: widget.accentColor,
                 ),
               ),
             )
-          : Flexible(
-              child: Container(
-                color: widget.backgroundColor ??
-                    Theme.of(context).scaffoldBackgroundColor,
-                child: WebViewWidget(
-                  controller: _webViewController!,
-                  gestureRecognizers: gestureRecognizers,
-                ),
+          : Container(
+              color: widget.backgroundColor ??
+                  Theme.of(context).scaffoldBackgroundColor,
+              child: WebViewWidget(
+                controller: _webViewController!,
+                gestureRecognizers: gestureRecognizers,
               ),
             );
 }
