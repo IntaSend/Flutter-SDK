@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_intasend/flutter_intasend.dart';
 
@@ -12,6 +14,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const MaterialApp(
+      debugShowCheckedModeBanner: false,
       home: HomePage(),
     );
   }
@@ -33,21 +36,40 @@ class _HomePageState extends State<HomePage> {
       ),
       body: Center(
         child: FilledButton.tonal(
-          onPressed: () {
+          onPressed: () async {
             // Initiating the Intasend checkout process when the button is pressed
-            FlutterIntasend.initCheckOut(
+            await FlutterIntasend.initCheckOut(
               context: context,
               isTest: true,
               publicKey: "ISPubKey_test_c319353e-ada9-41e6-a793-1a5ad8991e22",
               currency: Currency.kes,
+              firstName: 'Test',
+              lastName: 'User',
+              email: 'jHbZt@example.com',
+              height: MediaQuery.of(context).size.height * 0.95,
               amount: 15,
-              accentColor: Colors.red,
-              backgroundColor: Colors.yellow,
-              height: MediaQuery.of(context).size.height * 0.7,
               borderRadius: 16.0,
               // Callback function for processing status
               onProcessing: () {
-                debugPrint("PROCESSING PAYMENT");
+                log("PROCESSING PAYMENT");
+              },
+              onCanceled: () {
+                log("CANCELED PAYMENT");
+              },
+              onComplete: () {
+                log("COMPLETED PAYMENT");
+              },
+              onFailed: () {
+                log("FAILED PAYMENT");
+              },
+              onPartial: () {
+                log("PARTIAL PAYMENT");
+              },
+              onPending: () {
+                log("PENDING PAYMENT");
+              },
+              onRetry: () {
+                log("RETRY PAYMENT");
               },
             );
           },

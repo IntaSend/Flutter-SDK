@@ -1,5 +1,6 @@
 // Importing necessary libraries
 import 'dart:async';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -72,6 +73,9 @@ class _CheckOutModalWidgetState extends State<CheckOutModalWidget> {
         publicKey: widget.publicKey,
         currency: widget.currency,
         amount: widget.amount,
+        firstName: widget.firstName,
+        lastName: widget.lastName,
+        email: widget.email,
         context: context);
 
     String id = idSi['id'];
@@ -109,7 +113,6 @@ class _CheckOutModalWidgetState extends State<CheckOutModalWidget> {
   @override
   void initState() {
     _loadPage();
-    super.initState();
     // Setting up a periodic timer to check payment status every 3 seconds
     _timer = Timer.periodic(
       const Duration(seconds: 3),
@@ -144,6 +147,7 @@ class _CheckOutModalWidgetState extends State<CheckOutModalWidget> {
         },
       ),
     );
+    super.initState();
   }
 
   @override
@@ -190,6 +194,7 @@ class _CheckOutModalWidgetState extends State<CheckOutModalWidget> {
     // Building the widget structure
     return Scaffold(
       backgroundColor: Colors.transparent,
+      resizeToAvoidBottomInset: false,
       body: buildBody(gestureRecognizers: gestureRecognizers),
     );
   }
@@ -197,36 +202,45 @@ class _CheckOutModalWidgetState extends State<CheckOutModalWidget> {
   Widget buildBody({
     required Set<Factory<OneSequenceGestureRecognizer>> gestureRecognizers,
   }) =>
-      Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          const Spacer(),
-          Container(
-            decoration: BoxDecoration(
-              borderRadius: widget.borderRadius == null
-                  ? null
-                  : BorderRadius.only(
-                      topLeft: Radius.circular(widget.borderRadius!),
-                      topRight: Radius.circular(widget.borderRadius!),
+      CustomScrollView(
+        slivers: [
+          SliverFillRemaining(
+            hasScrollBody: true,
+            fillOverscroll: true,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Container(
+                  decoration: BoxDecoration(
+                    borderRadius: widget.borderRadius == null
+                        ? null
+                        : BorderRadius.only(
+                            topLeft: Radius.circular(widget.borderRadius!),
+                            topRight: Radius.circular(widget.borderRadius!),
+                          ),
+                    color: widget.backgroundColor ??
+                        Theme.of(context).scaffoldBackgroundColor,
+                  ),
+                  child: Align(
+                    alignment: Alignment.centerRight,
+                    child: IconButton(
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                      icon: const Icon(Icons.close_rounded),
                     ),
-              color: widget.backgroundColor ??
-                  Theme.of(context).scaffoldBackgroundColor,
-            ),
-            child: Align(
-              alignment: Alignment.centerRight,
-              child: IconButton(
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-                icon: const Icon(Icons.close_rounded),
-              ),
+                  ),
+                ),
+                Flexible(
+                  child: buildWebView(
+                    backgroundColor: widget.backgroundColor ??
+                        Theme.of(context).scaffoldBackgroundColor,
+                    gestureRecognizers: gestureRecognizers,
+                  ),
+                )
+              ],
             ),
           ),
-          buildWebView(
-            backgroundColor: widget.backgroundColor ??
-                Theme.of(context).scaffoldBackgroundColor,
-            gestureRecognizers: gestureRecognizers,
-          )
         ],
       );
 
@@ -235,25 +249,22 @@ class _CheckOutModalWidgetState extends State<CheckOutModalWidget> {
     required Set<Factory<OneSequenceGestureRecognizer>> gestureRecognizers,
   }) =>
       _webViewController == null
-          ? Flexible(
-              child: Container(
-                color: widget.backgroundColor ??
-                    Theme.of(context).scaffoldBackgroundColor,
-                child: Center(
-                  child: CircularProgressIndicator(
-                    color: widget.accentColor,
-                  ),
+          ? Container(
+              color: widget.backgroundColor ??
+                  Theme.of(context).scaffoldBackgroundColor,
+              child: Center(
+                child: CircularProgressIndicator(
+                  color: widget.accentColor,
                 ),
               ),
             )
-          : Flexible(
-              child: Container(
-                color: widget.backgroundColor ??
-                    Theme.of(context).scaffoldBackgroundColor,
-                child: WebViewWidget(
-                  controller: _webViewController!,
-                  gestureRecognizers: gestureRecognizers,
-                ),
+          : Container(
+              height: MediaQuery.of(context).size.height,
+              color: widget.backgroundColor ??
+                  Theme.of(context).scaffoldBackgroundColor,
+              child: WebViewWidget(
+                controller: _webViewController!,
+                gestureRecognizers: gestureRecognizers,
               ),
             );
 }

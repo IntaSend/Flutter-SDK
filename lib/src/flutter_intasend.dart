@@ -1,7 +1,8 @@
 // Importing necessary libraries and classes
 import 'package:flutter/material.dart';
 import 'package:flutter_intasend/src/checkout/enums/currency.dart';
-import 'package:flutter_intasend/src/checkout/widgets/checkout_modal.dart';
+
+import 'checkout/widgets/checkout_modal.dart';
 
 // Class for handling Intasend functionalities in Flutter
 class FlutterIntasend {
@@ -31,34 +32,40 @@ class FlutterIntasend {
     double? borderRadius,
   }) async {
     // Showing a loading dialog while processing the checkout initialization
-    showDialog(
-      barrierDismissible: false,
-      context: context,
-      builder: (BuildContext context) {
-        return PopScope(
-          canPop: false,
-          child: CheckOutModalWidget(
-            isTest: isTest,
-            publicKey: publicKey,
-            currency: currency,
-            amount: amount,
-            backgroundColor: backgroundColor,
-            accentColor: accentColor,
-            height: height,
-            email: email,
-            lastName: lastName,
-            firstName: firstName,
-            onCanceled: onCanceled,
-            onComplete: onCanceled,
-            onFailed: onFailed,
-            onPartial: onPartial,
-            onPending: onPending,
-            onProcessing: onProcessing,
-            onRetry: onRetry,
-            borderRadius: borderRadius,
-          ),
-        );
-      },
-    );
+    showModalBottomSheet(
+        context: context,
+        isDismissible: true,
+        enableDrag: false,
+        isScrollControlled: true,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(borderRadius ?? 16.0),
+        ),
+        constraints: BoxConstraints.expand(
+            height: height ?? MediaQuery.of(context).size.height * 0.95),
+        builder: (BuildContext context) {
+          return PopScope(
+            canPop: false,
+            child: CheckOutModalWidget(
+              isTest: isTest,
+              publicKey: publicKey,
+              currency: currency,
+              amount: amount,
+              backgroundColor: backgroundColor,
+              accentColor: accentColor,
+              height: height,
+              email: email,
+              lastName: lastName,
+              firstName: firstName,
+              onCanceled: onCanceled,
+              onComplete: onCanceled,
+              onFailed: onFailed,
+              onPartial: onPartial,
+              onPending: onPending,
+              onProcessing: onProcessing,
+              onRetry: onRetry,
+              borderRadius: borderRadius,
+            ),
+          );
+        });
   }
 }
