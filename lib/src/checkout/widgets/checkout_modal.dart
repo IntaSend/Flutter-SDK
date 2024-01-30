@@ -68,11 +68,12 @@ class _CheckOutModalWidgetState extends State<CheckOutModalWidget> {
 
   Future _loadPage() async {
     Map<String, dynamic> idSi = await getIdSignature(
-        isTest: widget.isTest,
-        publicKey: widget.publicKey,
-        currency: widget.currency,
-        amount: widget.amount,
-        context: context);
+      isTest: widget.isTest,
+      publicKey: widget.publicKey,
+      currency: widget.currency,
+      amount: widget.amount,
+      context: context,
+    );
 
     String id = idSi['id'];
     String signature = idSi['signature'];
@@ -200,7 +201,10 @@ class _CheckOutModalWidgetState extends State<CheckOutModalWidget> {
       Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          const Spacer(),
+          Flexible(
+            flex: 3,
+            child: Container(),
+          ),
           Container(
             decoration: BoxDecoration(
               borderRadius: widget.borderRadius == null
@@ -226,7 +230,7 @@ class _CheckOutModalWidgetState extends State<CheckOutModalWidget> {
             backgroundColor: widget.backgroundColor ??
                 Theme.of(context).scaffoldBackgroundColor,
             gestureRecognizers: gestureRecognizers,
-          )
+          ),
         ],
       );
 
@@ -236,6 +240,7 @@ class _CheckOutModalWidgetState extends State<CheckOutModalWidget> {
   }) =>
       _webViewController == null
           ? Flexible(
+            flex: 1,
               child: Container(
                 color: widget.backgroundColor ??
                     Theme.of(context).scaffoldBackgroundColor,
@@ -247,6 +252,7 @@ class _CheckOutModalWidgetState extends State<CheckOutModalWidget> {
               ),
             )
           : Flexible(
+            flex: 5,
               child: Container(
                 color: widget.backgroundColor ??
                     Theme.of(context).scaffoldBackgroundColor,

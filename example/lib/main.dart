@@ -49,6 +49,24 @@ class _HomePageState extends State<HomePage> {
               onProcessing: () {
                 debugPrint("PROCESSING PAYMENT");
               },
+              onPending: () {
+                debugPrint("PENDING PAYMENT");
+              },
+              onCanceled: () {
+                debugPrint("CANCELLED PAYMENT");
+              },
+              onFailed: () {
+                debugPrint("FAILED PAYMENT");
+              },
+              onPartial: () {
+                debugPrint("PARTIAL PAYMENT");
+              },
+              onComplete: () {
+                debugPrint("COMPLETE PAYMENT");
+              },
+              onRetry: () {
+                debugPrint("RETRY PAYMENT");
+              },
             );
           },
           child: const Text("Complete Payment"),
