@@ -201,7 +201,10 @@ class _CheckOutModalWidgetState extends State<CheckOutModalWidget> {
       Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          const Spacer(),
+          Flexible(
+            flex: 3,
+            child: Container(),
+          ),
           Container(
             decoration: BoxDecoration(
               borderRadius: widget.borderRadius == null
@@ -237,6 +240,7 @@ class _CheckOutModalWidgetState extends State<CheckOutModalWidget> {
   }) =>
       _webViewController == null
           ? Flexible(
+            flex: 1,
               child: Container(
                 color: widget.backgroundColor ??
                     Theme.of(context).scaffoldBackgroundColor,
@@ -248,6 +252,7 @@ class _CheckOutModalWidgetState extends State<CheckOutModalWidget> {
               ),
             )
           : Flexible(
+            flex: 5,
               child: Container(
                 color: widget.backgroundColor ??
                     Theme.of(context).scaffoldBackgroundColor,
