@@ -49,7 +49,7 @@ class FlutterIntasend {
             lastName: lastName,
             firstName: firstName,
             onCanceled: onCanceled,
-            onComplete: onCanceled,
+            onComplete: onComplete,
             onFailed: onFailed,
             onPartial: onPartial,
             onPending: onPending,

@@ -68,11 +68,12 @@ class _CheckOutModalWidgetState extends State<CheckOutModalWidget> {
 
   Future _loadPage() async {
     Map<String, dynamic> idSi = await getIdSignature(
-        isTest: widget.isTest,
-        publicKey: widget.publicKey,
-        currency: widget.currency,
-        amount: widget.amount,
-        context: context);
+      isTest: widget.isTest,
+      publicKey: widget.publicKey,
+      currency: widget.currency,
+      amount: widget.amount,
+      context: context,
+    );
 
     String id = idSi['id'];
     String signature = idSi['signature'];
@@ -226,7 +227,7 @@ class _CheckOutModalWidgetState extends State<CheckOutModalWidget> {
             backgroundColor: widget.backgroundColor ??
                 Theme.of(context).scaffoldBackgroundColor,
             gestureRecognizers: gestureRecognizers,
-          )
+          ),
         ],
       );
 
