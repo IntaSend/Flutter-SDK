@@ -127,6 +127,14 @@ class _CheckOutModalWidgetState extends State<CheckOutModalWidget> {
               break;
             case "FAILED":
               if (widget.onFailed != null) widget.onFailed!();
+              Fluttertoast.showToast(
+                msg: "Payment failed",
+                toastLength: Toast.LENGTH_SHORT,
+                gravity: ToastGravity.CENTER,
+                backgroundColor: Colors.redAccent,
+                textColor: Colors.white,
+                fontSize: 16.0,
+              );
               break;
             case "CANCELLED":
               if (widget.onCanceled != null) widget.onCanceled!();
