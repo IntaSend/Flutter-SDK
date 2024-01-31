@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_intasend/src/checkout/enums/currency.dart';
 import 'package:flutter_intasend/src/checkout/services/get_checkout_url.dart';
 import 'package:flutter_intasend/src/checkout/services/get_id_signature.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 // Custom Widget representing the Checkout Modal
@@ -126,6 +127,14 @@ class _CheckOutModalWidgetState extends State<CheckOutModalWidget> {
               break;
             case "FAILED":
               if (widget.onFailed != null) widget.onFailed!();
+              Fluttertoast.showToast(
+                msg: "Payment failed",
+                toastLength: Toast.LENGTH_SHORT,
+                gravity: ToastGravity.CENTER,
+                backgroundColor: Colors.redAccent,
+                textColor: Colors.white,
+                fontSize: 16.0,
+              );
               break;
             case "CANCELLED":
               if (widget.onCanceled != null) widget.onCanceled!();
@@ -136,6 +145,14 @@ class _CheckOutModalWidgetState extends State<CheckOutModalWidget> {
             case "COMPLETE":
               if (widget.onComplete != null) widget.onComplete!();
               Navigator.pop(context);
+              Fluttertoast.showToast(
+                msg: "Payment was successful",
+                toastLength: Toast.LENGTH_SHORT,
+                gravity: ToastGravity.CENTER,
+                backgroundColor: Colors.green,
+                textColor: Colors.white,
+                fontSize: 16.0,
+              );
               break;
             case "RETRY":
               if (widget.onRetry != null) widget.onRetry!();
@@ -170,8 +187,14 @@ class _CheckOutModalWidgetState extends State<CheckOutModalWidget> {
               'var doc = parser.parseFromString(document.body.innerHTML, "text/html");'
               'var statusElement = Array.from(doc.querySelectorAll(".flex.py-1 > div"))'
               '  .find(element => element.innerText.trim() === "Status");'
-              'var statusValue = statusElement.nextElementSibling.innerText;'
+              'var statusValue = "";'
+              'if (statusElement && statusElement.nextElementSibling) {'
+              '  statusValue = statusElement.nextElementSibling.innerText;'
+              '} else {'
+              '  statusValue = "INCOMPLETE";'
+              '}'
               'statusValue;');
+
           // Extracting the status from the JavaScript result
           String objectString = result.toString();
           status = objectString.substring(1, objectString.length - 1);
@@ -240,7 +263,7 @@ class _CheckOutModalWidgetState extends State<CheckOutModalWidget> {
   }) =>
       _webViewController == null
           ? Flexible(
-            flex: 1,
+              flex: 1,
               child: Container(
                 color: widget.backgroundColor ??
                     Theme.of(context).scaffoldBackgroundColor,
@@ -252,7 +275,7 @@ class _CheckOutModalWidgetState extends State<CheckOutModalWidget> {
               ),
             )
           : Flexible(
-            flex: 5,
+              flex: 5,
               child: Container(
                 color: widget.backgroundColor ??
                     Theme.of(context).scaffoldBackgroundColor,
