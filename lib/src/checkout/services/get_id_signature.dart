@@ -67,15 +67,27 @@ Future<Map<String, dynamic>> getIdSignature({
     Future.delayed(
       const Duration(seconds: 1),
       () {
+        String errorMessage = 'An error occurred';
+
+        if (e is http.ClientException) {
+          errorMessage =
+              'Unable to connect to the server. Please check your internet connection.';
+        } else if (e is FormatException) {
+          errorMessage = 'Invalid server response. Please try again later.';
+        } else if (e is Exception) {
+          errorMessage = 'Something went wrong. Please try again later.';
+        }
+
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
+          SnackBar(
             backgroundColor: Colors.redAccent,
-            content: Text('Check your internet connection!!!'),
+            content: Text(errorMessage),
           ),
         );
         Navigator.pop(context);
       },
     );
+
     // Throwing an exception if an error occurs during the request
     throw Exception('$e');
   }
