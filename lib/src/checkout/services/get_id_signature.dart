@@ -64,29 +64,31 @@ Future<Map<String, dynamic>> getIdSignature({
       throw Exception('${data['errors'][0]['detail']}');
     }
   } catch (e) {
-    Future.delayed(
-      const Duration(seconds: 1),
-      () {
-        String errorMessage = 'An error occurred';
+    if (isTest == false) {
+      Future.delayed(
+        const Duration(seconds: 1),
+        () {
+          String errorMessage = 'An error occurred';
 
-        if (e is http.ClientException) {
-          errorMessage =
-              'Unable to connect to the server. Please check your internet connection.';
-        } else if (e is FormatException) {
-          errorMessage = 'Invalid server response. Please try again later.';
-        } else if (e is Exception) {
-          errorMessage = 'Something went wrong. Please try again later.';
-        }
+          if (e is http.ClientException) {
+            errorMessage =
+                'Unable to connect to the server. Please check your internet connection.';
+          } else if (e is FormatException) {
+            errorMessage = 'Invalid server response. Please try again later.';
+          } else if (e is Exception) {
+            errorMessage = 'Something went wrong. Please try again later.';
+          }
 
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            backgroundColor: Colors.redAccent,
-            content: Text(errorMessage),
-          ),
-        );
-        Navigator.pop(context);
-      },
-    );
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              backgroundColor: Colors.redAccent,
+              content: Text(errorMessage),
+            ),
+          );
+          Navigator.pop(context);
+        },
+      );
+    }
 
     // Throwing an exception if an error occurs during the request
     throw Exception('$e');
